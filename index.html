@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportation Reports and Analytics</title>
+    <meta name="description"
+        content="Dashboard analytics for Malaysia's transportation sectors including aviation, land, maritime, and logistic.">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo-text">Malaysia Transportation <span class="text-accent">Reports and Analytics</span>
+                </h1>
+            </div>
+
+            <div class="menu-container">
+                <!-- Aviation Menu -->
+                <div class="menu-section">
+                    <h2 class="menu-title"><i class="ph ph-airplane-tilt"></i> Aviation</h2>
+                    <ul class="menu-list">
+                        <li class="menu-item active" data-view="aviation-reports">Aviation Reports</li>
+                        <li class="menu-item" data-view="aviation-aaib">Statistics & Accident Report (AAIB)</li>
+                        <li class="menu-item" data-view="aviation-archived">Archived Air Accident Report</li>
+                        <li class="menu-item" data-view="aviation-quarterly">Quarterly Statistics of Transport -
+                            Aviation Transport</li>
+                    </ul>
+                </div>
+
+                <!-- Land Menu -->
+                <div class="menu-section">
+                    <h2 class="menu-title"><i class="ph ph-car-profile"></i> Land</h2>
+                    <ul class="menu-list">
+                        <li class="menu-item" data-view="land-report">Land Report and Statistic</li>
+                        <li class="menu-item" data-view="land-stocktaking-summary">Malaysia Stocktaking Report on
+                            Sustainable Transport and Climate Change (Summary)</li>
+                        <li class="menu-item" data-view="land-stocktaking">Malaysia Stocktaking Report on Sustainable
+                            Transport and Climate Change</li>
+                        <li class="menu-item" data-view="land-quarterly-land">Quarterly Statistics - Land Transport</li>
+                        <li class="menu-item" data-view="land-quarterly-rail">Quarterly Statistics - Rail Transport</li>
+                    </ul>
+                </div>
+
+                <!-- Maritime Menu -->
+                <div class="menu-section">
+                    <h2 class="menu-title"><i class="ph ph-anchor"></i> Maritime</h2>
+                    <ul class="menu-list">
+                        <li class="menu-item" data-view="maritime-quarterly">Quarterly Statistic of Maritime Transport
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Logistic Menu -->
+                <div class="menu-section">
+                    <h2 class="menu-title"><i class="ph ph-package"></i> Logistic</h2>
+                    <ul class="menu-list">
+                        <li class="menu-item" data-view="logistic-data">National Logistic Data Achievement</li>
+                        <li class="menu-item" data-view="logistic-report">National Logistic Data Achievement Report 2015
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User Profile"
+                        class="avatar">
+                    <div class="user-info">
+                        <span class="user-name">Administrator</span>
+                        <span class="user-role">Transport Dept</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <button id="menu-toggle" class="menu-toggle" aria-label="Toggle Menu">
+                    <i class="ph ph-list"></i>
+                </button>
+                <div class="topbar-search">
+                    <i class="ph ph-magnifying-glass search-icon"></i>
+                    <input type="text" placeholder="Search analytics..." class="search-input">
+                </div>
+                <div class="topbar-actions">
+                    <button class="icon-btn" aria-label="Notifications">
+                        <i class="ph ph-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="icon-btn" aria-label="Settings">
+                        <i class="ph ph-gear"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="dashboard-area">
+                <!-- Dynamic Content Header -->
+                <div class="content-header">
+                    <div>
+                        <h2 id="page-title" class="page-title">Aviation Reports</h2>
+                        <p id="page-subtitle" class="page-subtitle">Overview of aviation transport and related
+                            statistics.</p>
+                    </div>
+                    <div class="date-filter">
+                        <select class="glass-select">
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>This Year</option>
+                        </select>
+                        <button class="btn-primary"><i class="ph ph-download-simple"></i> Export</button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6;">
+                            <i class="ph ph-airplane-in-flight"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 class="stat-label">Total Flights</h3>
+                            <p class="stat-value" id="stat-1-val">12,450</p>
+                            <span class="stat-change positive"><i class="ph ph-trend-up"></i> +5.2%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">
+                            <i class="ph ph-users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 class="stat-label">Passengers</h3>
+                            <p class="stat-value" id="stat-2-val">2.1M</p>
+                            <span class="stat-change positive"><i class="ph ph-trend-up"></i> +12.4%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
+                            <i class="ph ph-warning-circle"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 class="stat-label">Incidents</h3>
+                            <p class="stat-value" id="stat-3-val">3</p>
+                            <span class="stat-change negative"><i class="ph ph-trend-down"></i> -2.1%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-icon" style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6;">
+                            <i class="ph ph-check-circle"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3 class="stat-label">On-Time Perf.</h3>
+                            <p class="stat-value" id="stat-4-val">94.2%</p>
+                            <span class="stat-change positive"><i class="ph ph-trend-up"></i> +1.1%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Area -->
+                <div class="charts-grid">
+                    <div class="chart-card glass-panel col-span-2">
+                        <div class="card-header">
+                            <h3 class="card-title">Trend Analysis</h3>
+                            <button class="icon-btn-small"><i class="ph ph-dots-three"></i></button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="mainChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card glass-panel">
+                        <div class="card-header">
+                            <h3 class="card-title">Distribution</h3>
+                            <button class="icon-btn-small"><i class="ph ph-dots-three"></i></button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table Area -->
+                <div class="table-card glass-panel">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Records</h3>
+                        <button class="btn-secondary">View All</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
