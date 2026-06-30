@@ -112,6 +112,26 @@ function initCharts(data) {
                 }
             }
         });
+
+        // Add filter listener
+        const airportFilter = document.getElementById('airportFilter');
+        if (airportFilter && data.airportTrendData) {
+            // Remove old listener to avoid duplicates
+            const newFilter = airportFilter.cloneNode(true);
+            airportFilter.parentNode.replaceChild(newFilter, airportFilter);
+            
+            newFilter.addEventListener('change', (e) => {
+                const selected = e.target.value;
+                if (selected === 'ALL') {
+                    mainChartInstance.data.datasets[0].data = data.trendData;
+                    mainChartInstance.data.datasets[0].label = 'Total Aircraft Movements';
+                } else {
+                    mainChartInstance.data.datasets[0].data = data.airportTrendData[selected] || [];
+                    mainChartInstance.data.datasets[0].label = selected + ' Movements';
+                }
+                mainChartInstance.update();
+            });
+        }
     }
 
     // 2. Initialize Doughnut Chart

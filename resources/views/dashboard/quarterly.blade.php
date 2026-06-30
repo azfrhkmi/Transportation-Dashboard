@@ -3,8 +3,8 @@
 @section('dashboard_content')
 <div class="content-header">
     <div>
-        <h2 class="page-title">Quarterly Statistics (2014-2026)</h2>
-        <p class="page-subtitle">Historical overview of transport statistics.</p>
+        <h2 class="page-title text-white">Quarterly Statistics</h2>
+        <p class="page-subtitle text-gray-400">Historical overview of transport statistics by year.</p>
     </div>
 </div>
 
@@ -15,7 +15,7 @@
         @csrf
         <div>
             <label class="block text-sm mb-1 text-gray-500">Year</label>
-            <input type="number" name="year" value="{{ date('Y') }}" class="glass-select p-2 rounded" required>
+            <input type="number" name="year" value="2025" class="glass-select p-2 rounded" required>
         </div>
         <div>
             <label class="block text-sm mb-1 text-gray-500">Quarter</label>
@@ -36,6 +36,23 @@
         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
     @enderror
 </div>
+
+@if($summary->isNotEmpty())
+<div class="glass-panel p-6 mb-8 mt-4" style="border: 1px solid rgba(239, 68, 68, 0.3);">
+    <h3 class="text-lg font-semibold mb-4 text-red-500"><i class="ph ph-warning"></i> Danger Zone: Delete Uploaded Data</h3>
+    <form action="{{ route('delete.data') }}" method="POST" class="flex gap-4 items-end" onsubmit="return confirm('Are you sure you want to delete all uploaded data for this year? This action cannot be undone.');">
+        @csrf
+        @method('DELETE')
+        <div>
+            <label class="block text-sm mb-1 text-gray-500">Year to Delete</label>
+            <input type="number" name="year" value="2025" class="glass-select p-2 rounded" style="border-color: #ef4444;" required>
+        </div>
+        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded transition-colors" style="background-color: #dc2626;">
+            <i class="ph ph-trash"></i> Delete All Data for Year
+        </button>
+    </form>
+</div>
+@endif
 @endif
 
 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">

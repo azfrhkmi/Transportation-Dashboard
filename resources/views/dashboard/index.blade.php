@@ -1,11 +1,21 @@
 @extends('layouts.dashboard')
 
 @section('dashboard_content')
-<div class="content-header">
+<div class="content-header flex justify-between items-end">
     <div>
-        <h2 id="page-title" class="page-title text-white">Aviation Reports</h2>
+        <h2 id="page-title" class="page-title text-white">Aviation Reports ({{ $targetYear }})</h2>
         <p id="page-subtitle" class="page-subtitle text-gray-400">Overview of aviation transport and related statistics.</p>
     </div>
+    @if(!empty($availableYears))
+    <form action="{{ route('dashboard') }}" method="GET" class="flex gap-2 items-center">
+        <label class="text-gray-400 text-sm">Filter Year:</label>
+        <select name="year" onchange="this.form.submit()" class="glass-select p-2 rounded text-white bg-transparent border border-[rgba(255,255,255,0.2)]">
+            @foreach($availableYears as $y)
+                <option value="{{ $y }}" {{ $y == $targetYear ? 'selected' : '' }} class="bg-gray-800">{{ $y }}</option>
+            @endforeach
+        </select>
+    </form>
+    @endif
 </div>
 
 <!-- Stats Grid -->
@@ -52,11 +62,18 @@
     </div>
 </div>
 
-<!-- Charts Area -->
 <div class="charts-grid">
     <div class="chart-card glass-panel col-span-2">
-        <div class="card-header">
+        <div class="card-header flex justify-between items-center">
             <h3 class="card-title" style="color: var(--text-primary)">Trend Analysis</h3>
+            @if(!empty($allAirports))
+            <select id="airportFilter" class="glass-select p-1 text-sm rounded bg-gray-800 text-white border border-[rgba(255,255,255,0.2)]">
+                <option value="ALL">All Airports (Aggregate)</option>
+                @foreach($allAirports as $ap)
+                    <option value="{{ $ap }}">{{ $ap }}</option>
+                @endforeach
+            </select>
+            @endif
         </div>
         <div class="chart-container">
             <canvas id="mainChart"></canvas>
@@ -77,6 +94,7 @@
     window.dashboardData = {
         trendLabels: @json($trendLabels),
         trendData: @json($trendData),
+        airportTrendData: @json($airportTrendData),
         doughnutLabels: @json($doughnutLabels),
         doughnutData: @json($doughnutData)
     };

@@ -4,30 +4,64 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\QuarterlyStatistic;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\QuarterlyStatisticExport;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function downloadReport($year)
     {
+        return Excel::download(new QuarterlyStatisticExport($year), "Aviation_Report_{$year}.xlsx");
+    }
+
+    public function index(Request $request)
+    {
+        // Get all available years
+        $availableYears = QuarterlyStatistic::select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
+        
+        // Default to the requested year, or the most recent year, or the current year if database is empty
+        $targetYear = $request->query('year', !empty($availableYears) ? $availableYears[0] : date('Y'));
+
         // 1. Calculate Aggregate Stats
-        $totalFlights = QuarterlyStatistic::sum('grand_total');
-        $domesticFlights = QuarterlyStatistic::sum('domestic_total');
-        $internationalFlights = QuarterlyStatistic::sum('international_total');
-        $airportsCount = QuarterlyStatistic::distinct('airport_name')->count();
+        $totalFlights = QuarterlyStatistic::where('year', $targetYear)->sum('grand_total');
+        $domesticFlights = QuarterlyStatistic::where('year', $targetYear)->sum('domestic_total');
+        $internationalFlights = QuarterlyStatistic::where('year', $targetYear)->sum('international_total');
+        $airportsCount = QuarterlyStatistic::where('year', $targetYear)->distinct('airport_name')->count();
 
         // 2. Trend Data (Total Flights by Year-Quarter)
-        // Order by year and quarter
-        $trends = QuarterlyStatistic::selectRaw('year, quarter, sum(grand_total) as total')
-            ->groupBy('year', 'quarter')
+        $trends = QuarterlyStatistic::where('year', $targetYear)
+            ->selectRaw('year, quarter, airport_name, sum(grand_total) as total')
+            ->groupBy('year', 'quarter', 'airport_name')
             ->orderBy('year', 'asc')
             ->orderBy('quarter', 'asc')
             ->get();
             
-        $trendLabels = $trends->map(function($t) { return $t->year . ' Q' . $t->quarter; })->toArray();
-        $trendData = $trends->map(function($t) { return $t->total; })->toArray();
+        // Process trends to have an aggregate and per-airport dataset
+        $quarters = $trends->pluck('quarter')->unique()->sort()->values();
+        $trendLabels = $quarters->map(function($q) use ($targetYear) { return $targetYear . ' Q' . $q; })->toArray();
+        
+        $aggregateTrendData = [];
+        $airportTrendData = [];
+        
+        foreach ($quarters as $q) {
+            $qTrends = $trends->where('quarter', $q);
+            $aggregateTrendData[] = $qTrends->sum('total');
+            
+            foreach ($qTrends as $t) {
+                if (!isset($airportTrendData[$t->airport_name])) {
+                    $airportTrendData[$t->airport_name] = array_fill(0, count($quarters), 0);
+                }
+                // Find index of quarter
+                $qIndex = $quarters->search($q);
+                $airportTrendData[$t->airport_name][$qIndex] = $t->total;
+            }
+        }
+        
+        $trendData = $aggregateTrendData;
 
         // 3. Distribution Data (Top 5 Airports vs Others)
-        $airportDistribution = QuarterlyStatistic::selectRaw('airport_name, sum(grand_total) as total')
+        $airportDistribution = QuarterlyStatistic::where('year', $targetYear)
+            ->selectRaw('airport_name, sum(grand_total) as total')
             ->groupBy('airport_name')
             ->orderBy('total', 'desc')
             ->get();
@@ -43,9 +77,18 @@ class DashboardController extends Controller
             $doughnutData[] = $otherAirports->sum('total');
         }
 
+        // 4. Fetch all airports for the filter dropdown
+        $allAirports = QuarterlyStatistic::where('year', $targetYear)
+            ->select('airport_name')
+            ->distinct()
+            ->orderBy('airport_name', 'asc')
+            ->pluck('airport_name')
+            ->toArray();
+
         return view('dashboard.index', compact(
             'totalFlights', 'domesticFlights', 'internationalFlights', 'airportsCount',
-            'trendLabels', 'trendData', 'doughnutLabels', 'doughnutData'
+            'trendLabels', 'trendData', 'doughnutLabels', 'doughnutData',
+            'availableYears', 'targetYear', 'allAirports', 'airportTrendData'
         ));
     }
 
@@ -56,8 +99,10 @@ class DashboardController extends Controller
             return view('dashboard.quarterly_year', compact('year', 'stats'));
         }
 
-        $years = range(2014, 2026);
-        $summary = QuarterlyStatistic::selectRaw('year, sum(grand_total) as total')
+        $years = QuarterlyStatistic::select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
+        
+        $summary = QuarterlyStatistic::whereIn('year', $years)
+            ->selectRaw('year, sum(grand_total) as total')
             ->groupBy('year')
             ->get()
             ->keyBy('year');

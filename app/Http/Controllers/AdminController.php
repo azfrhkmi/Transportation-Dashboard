@@ -23,9 +23,35 @@ class AdminController extends Controller
         return back()->with('success', 'Excel data imported successfully!');
     }
 
-    public function createAdmin()
+    public function deleteData(Request $request)
     {
-        return view('superadmin.add_admin');
+        $request->validate([
+            'year' => 'required|integer',
+        ]);
+
+        \App\Models\QuarterlyStatistic::where('year', $request->year)->delete();
+
+        return back()->with('success', "All data for year {$request->year} deleted successfully!");
+    }
+
+    public function manageAdmins()
+    {
+        $users = User::orderBy('created_at', 'desc')->get();
+        return view('superadmin.manage_admins', compact('users'));
+    }
+
+    public function deleteAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        
+        // Prevent deleting yourself or another superadmin
+        if ($user->id === auth()->id() || $user->role === 'superadmin') {
+            return back()->withErrors(['error' => 'Cannot delete this user.']);
+        }
+        
+        $user->delete();
+        
+        return back()->with('success', 'Admin user deleted successfully!');
     }
 
     public function storeAdmin(Request $request)

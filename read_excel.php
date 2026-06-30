@@ -3,7 +3,7 @@ require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-$inputFileName = 'inputexcel/Data Sektor Udara Q1 - Q4 2014.xlsx';
+$inputFileName = 'inputexcel/Data Sektor Udara Q1 -  Q4 2025.xlsx';
 
 $spreadsheet = IOFactory::load($inputFileName);
 $worksheet = $spreadsheet->getActiveSheet();
@@ -23,7 +23,7 @@ foreach ($worksheet->getRowIterator() as $row) {
     }
     $rows[] = $cells;
     $i++;
-    if ($i >= 10) break; // Read first 10 rows
+    if ($i >= 30) break; // Read first 30 rows
 }
 
-print_r($rows);
+file_put_contents('excel_dump.json', json_encode($rows, JSON_PRETTY_PRINT));

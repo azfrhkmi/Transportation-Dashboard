@@ -13,17 +13,17 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-airplane-tilt"></i> Aviation</h2>
                 <ul class="menu-list">
-                    <li class="menu-item active"><a href="{{ route('dashboard') }}">Aviation Reports</a></li>
-                    <li class="menu-item"><a href="{{ route('quarterly') }}">Quarterly Statistics (2014-2026)</a></li>
+                    <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{ route('dashboard') }}">Aviation Reports</a></li>
+                    <li class="menu-item {{ request()->routeIs('quarterly') ? 'active' : '' }}"><a href="{{ route('quarterly') }}">Quarterly Statistics</a></li>
                 </ul>
             </div>
             <!-- Land Menu -->
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-car-profile"></i> Land</h2>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="{{ route('coming_soon', ['title' => 'Land Report and Statistic']) }}">Land Report & Statistic</a></li>
-                    <li class="menu-item"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistics - Land Transport']) }}">Quarterly Statistics - Land</a></li>
-                    <li class="menu-item"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistics - Rail Transport']) }}">Quarterly Statistics - Rail</a></li>
+                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Land Report and Statistic' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Land Report and Statistic']) }}">Land Report & Statistic</a></li>
+                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Quarterly Statistics - Land Transport' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistics - Land Transport']) }}">Quarterly Statistics - Land</a></li>
+                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Quarterly Statistics - Rail Transport' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistics - Rail Transport']) }}">Quarterly Statistics - Rail</a></li>
                 </ul>
             </div>
 
@@ -31,7 +31,7 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-boat"></i> Maritime</h2>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistic of Maritime Transport']) }}">Quarterly Statistics</a></li>
+                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Quarterly Statistic of Maritime Transport' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistic of Maritime Transport']) }}">Quarterly Statistics</a></li>
                 </ul>
             </div>
 
@@ -39,7 +39,7 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-package"></i> Logistic</h2>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="{{ route('coming_soon', ['title' => 'National Logistic Data Achievement']) }}">National Logistic Data</a></li>
+                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'National Logistic Data Achievement' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'National Logistic Data Achievement']) }}">National Logistic Data</a></li>
                 </ul>
             </div>
 
@@ -47,7 +47,7 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-shield"></i> Administration</h2>
                 <ul class="menu-list">
-                    <li class="menu-item"><a href="{{ route('superadmin.add-admin') }}">Add Admin User</a></li>
+                    <li class="menu-item {{ request()->routeIs('superadmin.add-admin') ? 'active' : '' }}"><a href="{{ route('superadmin.add-admin') }}">Manage Admins</a></li>
                 </ul>
             </div>
             @endif

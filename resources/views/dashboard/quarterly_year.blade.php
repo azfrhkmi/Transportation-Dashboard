@@ -6,7 +6,12 @@
         <h2 class="page-title">Statistics for {{ $year }}</h2>
         <p class="page-subtitle">Detailed breakdown by airport and quarter.</p>
     </div>
-    <a href="{{ route('quarterly') }}" class="btn-secondary py-2 px-4 rounded text-white border border-white">Back to Summary</a>
+    <div class="flex gap-4">
+        <a href="{{ route('export.quarterly', $year) }}" class="btn-primary py-2 px-4 rounded text-white bg-green-600 hover:bg-green-700 flex items-center gap-2">
+            <i class="ph ph-file-xls text-lg"></i> Download Excel
+        </a>
+        <a href="{{ route('quarterly') }}" class="btn-secondary py-2 px-4 rounded text-white border border-white">Back to Summary</a>
+    </div>
 </div>
 
 <div class="table-card glass-panel w-full mt-6">
