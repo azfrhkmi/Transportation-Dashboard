@@ -21,9 +21,9 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-car-profile"></i> Land</h2>
                 <ul class="menu-list">
-                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Land Report and Statistic' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Land Report and Statistic']) }}">Land Report & Statistic</a></li>
-                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Quarterly Statistics - Land Transport' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistics - Land Transport']) }}">Quarterly Statistics - Land</a></li>
-                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Quarterly Statistics - Rail Transport' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistics - Rail Transport']) }}">Quarterly Statistics - Rail</a></li>
+                    <li class="menu-item {{ request()->routeIs('land.index') ? 'active' : '' }}"><a href="{{ route('land.index') }}">Land Report & Statistic</a></li>
+                    <li class="menu-item {{ request()->routeIs('land.licenses') ? 'active' : '' }}"><a href="{{ route('land.licenses') }}">Quarterly Statistics - Land</a></li>
+                    <li class="menu-item {{ request()->routeIs('land.rail') ? 'active' : '' }}"><a href="{{ route('land.rail') }}">Quarterly Statistics - Rail</a></li>
                 </ul>
             </div>
 
@@ -31,7 +31,7 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-boat"></i> Maritime</h2>
                 <ul class="menu-list">
-                    <li class="menu-item {{ request()->routeIs('coming_soon') && request('title') == 'Quarterly Statistic of Maritime Transport' ? 'active' : '' }}"><a href="{{ route('coming_soon', ['title' => 'Quarterly Statistic of Maritime Transport']) }}">Quarterly Statistics</a></li>
+                    <li class="menu-item {{ request()->routeIs('maritime.index') ? 'active' : '' }}"><a href="{{ route('maritime.index') }}">Quarterly Statistics</a></li>
                 </ul>
             </div>
 
