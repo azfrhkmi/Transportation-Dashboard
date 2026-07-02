@@ -31,6 +31,7 @@
             <div class="menu-section">
                 <h2 class="menu-title"><i class="ph ph-boat"></i> Maritime</h2>
                 <ul class="menu-list">
+                    <li class="menu-item {{ request()->routeIs('maritime.report') ? 'active' : '' }}"><a href="{{ route('maritime.report') }}">Maritime Report & Statistic</a></li>
                     <li class="menu-item {{ request()->routeIs('maritime.index') ? 'active' : '' }}"><a href="{{ route('maritime.index') }}">Quarterly Statistics</a></li>
                 </ul>
             </div>

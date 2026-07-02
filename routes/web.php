@@ -22,7 +22,8 @@ Route::get('/land/licenses', [LandController::class, 'licenses'])->name('land.li
 Route::get('/land/rail', [LandController::class, 'rail'])->name('land.rail');
 
 // Maritime Routes
-Route::get('/maritime', [MaritimeController::class, 'index'])->name('maritime.index');
+Route::get('/maritime', [MaritimeController::class, 'report'])->name('maritime.report');
+Route::get('/maritime/quarterly', [MaritimeController::class, 'index'])->name('maritime.index');
 
 Route::get('/coming-soon', function (\Illuminate\Http\Request $request) {
     return view('dashboard.coming_soon', ['title' => $request->query('title', 'Coming Soon')]);
